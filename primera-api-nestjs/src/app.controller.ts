@@ -1,19 +1,19 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { AppService } from './app.service.js';
+import { Controller, Get, Post, Body } from '@nestjs/common';
+import { AppService } from './app.service';
 
-export interface Clase {
+export interface ClaseGimnasio {
   id: number;
   nombre: string;
 }
 
 @Controller()
 export class AppController {
-  private clases: Clase[] = [
-    { id: 1, nombre: 'Yoga' },
-    { id: 2, nombre: 'Spinning' },
-  ];
-
   constructor(private readonly appService: AppService) {}
+
+  private clases: ClaseGimnasio[] = [
+    { id: 1, nombre: 'Spinning' },
+    { id: 2, nombre: 'CrossFit' },
+  ];
 
   @Get()
   getHello(): string {
@@ -21,15 +21,14 @@ export class AppController {
   }
 
   @Get('clases')
-  listar(): Clase[] {
+  obtenerClases(): ClaseGimnasio[] {
     return this.clases;
   }
-
+  
   @Post('clases')
-  crear(@Body() cuerpo: { nombre: string }): Clase {
-    const nueva: Clase = { id: this.clases.length + 1, nombre: cuerpo.nombre };
-    this.clases.push(nueva);
-    return nueva;
+  crearClase(@Body() nuevaClase: ClaseGimnasio): ClaseGimnasio {
+    this.clases.push(nuevaClase);
+    return nuevaClase;
   }
 }
 
