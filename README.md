@@ -17,3 +17,52 @@ Al no tener implementados pipes de validación global (`ValidationPipe`) ni DTOs
 
 ### 5. ¿En qué archivo vive hoy toda la lógica de la práctica?
 En el archivo `src/app.controller.ts`, ya que en él se definió la variable en memoria (`clases`) y se maneja directamente la lectura y agregación de los datos en las peticiones HTTP.
+
+Practica 6
+### 1. Inscribir miembro 1 en horario 1 (Responde 201 Created con cabecera Location)
+POST http://localhost:3000/inscripciones
+Content-Type: application/json
+
+{
+  "horarioId": 1,
+  "miembroId": 1
+}
+
+### 2. Regla 1: Duplicado (Mismo miembro y mismo horario -> Responde 409)
+POST http://localhost:3000/inscripciones
+Content-Type: application/json
+
+{
+  "horarioId": 1,
+  "miembroId": 1
+}
+
+### 3. Inscribir miembro 2 en horario 1 (Cupo restante: 0) -> Responde 201
+POST http://localhost:3000/inscripciones
+Content-Type: application/json
+
+{
+  "horarioId": 1,
+  "miembroId": 2
+}
+
+### 4. Regla 2: Cupo Lleno (Tercera persona en horario de cupo 2 -> Responde 409)
+POST http://localhost:3000/inscripciones
+Content-Type: application/json
+
+{
+  "horarioId": 1,
+  "miembroId": 3
+}
+
+### 5. Cancelar inscripción (ID 1) -> Responde 200 OK
+DELETE http://localhost:3000/inscripciones/1
+
+### 6. Reintentar miembro 3 en horario 1 (Ahora tiene cupo -> Responde 201)
+POST http://localhost:3000/inscripciones
+Content-Type: application/json
+
+{
+  "horarioId": 1,
+  "miembroId": 3
+}
